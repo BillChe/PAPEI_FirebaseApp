@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "652764422376",
+    "project_id": "papeiproj1",
+    "storage_bucket": "papeiproj1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:652764422376:android:1d37d3f0b69239e1d9a95d",
+        "android_client_info": {
+          "package_name": "com.example.papei_firebaseapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "652764422376-v2el8hsp95ieqgq8hv3hn498k35kd33e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRYWd2vhKAMilbLFStBpLKgTKPSWoV8fo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "652764422376-v2el8hsp95ieqgq8hv3hn498k35kd33e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
