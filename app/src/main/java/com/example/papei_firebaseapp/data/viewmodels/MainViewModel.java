@@ -39,4 +39,9 @@ public class MainViewModel extends ViewModel {
         context.startActivity(registerIntent);
 
     }
+
+    public void report()
+    {
+
+    }
 }
