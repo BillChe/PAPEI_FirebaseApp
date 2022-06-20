@@ -65,67 +65,74 @@ public class RegisterForm extends Activity implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
+        if((usernameEditText.getText()!=null) && (passwordEditText.getText()!=null)
+                && !usernameEditText.getText().toString().isEmpty()
+                && !passwordEditText.getText().toString().isEmpty())
+        {
         String username = String.valueOf(usernameEditText.getText());
         String password = String.valueOf(passwordEditText.getText());
         String email = String.valueOf(emailEt.getText());
 
-        if((usernameEditText.getText()!=null) && (passwordEditText.getText()!=null))
-            {
-                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful())
-                        {
-                            //create a user object
-                            User user = new User(username, email);
-                            //put user in real time database
-                            //create a firebase database object here
-                            //create a collection named Users
-                            FirebaseDatabase.getInstance().getReference("Users")
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .setValue(user)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if(task.isSuccessful())
-                                            {
-                                                Toast.makeText(context, context.getString(R.string.register_success),
-                                                        Toast.LENGTH_LONG).show();
-                                                //todo redirect to Login Screen !!!!
-                                            }
-                                            else
-                                            {
-                                                Toast.makeText(context, context.getString(R.string.register_success),
-                                                        Toast.LENGTH_LONG).show();
-                                            }
-                                        }
-                                    });
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful())
+                {
+                    //create a user object
+                    User user = new User(username, email);
+                    //put user in real time database
+                    //create a firebase database object here
+                    //create a collection named Users
+                    FirebaseDatabase.getInstance().getReference("Users")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .setValue(user)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful())
+                                    {
+                                        Toast.makeText(context, context.getString(R.string.register_success),
+                                                Toast.LENGTH_LONG).show();
+                                        //todo redirect to Login Screen !!!!
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(context, context.getString(R.string.register_fail),
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
 
-                        }
-                        else
-                        {
-                            Toast.makeText(context, context.getString(R.string.register_success),
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-                new AlertDialog.Builder(context)
-                        .setTitle("Completed entry")
-                        .setMessage("You Are Now Registered")
-                        // Specifying a listener allows you to take an action before dismissing the dialog.
-                        // The dialog is automatically dismissed when a dialog button is clicked.
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Continue with delete operation
-                                dialog.dismiss();
-                                Intent loginIntent = new Intent(RegisterForm.this, LoginActivity.class);
-                                startActivity(loginIntent);
-                            }
-                        })
-                        // A null listener allows the button to dismiss the dialog and take no further action.
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+                }
+                else
+                {
+                    Toast.makeText(context, context.getString(R.string.register_success),
+                            Toast.LENGTH_LONG).show();
+                }
             }
+        });
+        new AlertDialog.Builder(context)
+                .setTitle("Completed entry")
+                .setMessage("You Are Now Registered")
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Continue with delete operation
+                        dialog.dismiss();
+                        Intent loginIntent = new Intent(RegisterForm.this, LoginActivity.class);
+                        startActivity(loginIntent);
+                    }
+                })
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .show();
+        }
+        else
+        {
+            Toast.makeText(context, context.getString(R.string.please_check_data),
+                    Toast.LENGTH_LONG).show();
+        }
             registered = true;
     }
 

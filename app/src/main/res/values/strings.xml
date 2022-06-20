@@ -12,6 +12,7 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="register">Register</string>
+    <string name="password">Password</string>
     <string name="forgot_password">Forgot Password</string>
     <string name="register_success">User has been registered successfully!</string>
     <string name="register_fail">Failed to register, please try again</string>
@@ -27,4 +28,7 @@
     <string name="report_new">Report new incident</string>
     <string name="view_all_user_incidents">My Incidents</string>
     <string name="view_all_incidents">View All Incidents</string>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
+    <string name="please_check_data">Please check your data</string>
 </resources>

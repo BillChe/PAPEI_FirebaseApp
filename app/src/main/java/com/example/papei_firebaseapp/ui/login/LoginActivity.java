@@ -142,6 +142,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 login();
             }
         });
+
+        binding.register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent registerIntent = new Intent(LoginActivity.this, RegisterForm.class);
+                registerIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(registerIntent);
+                LoginActivity.this.finish();
+            }
+        });
+
+        binding.forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent forgotPassword = new Intent(LoginActivity.this, PasswordForgot.class);
+                forgotPassword.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(forgotPassword);
+                LoginActivity.this.finish();
+            }
+        });
+
+
     }
 
     private void setViews() {
@@ -162,12 +184,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId())
         {
-            case R.id.register:
-                register();
             case R.id.login:
                 login();
-            case R.id.forgotPassword:
-                remindPassword();
                 
             default:
 
@@ -245,17 +263,4 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private void register() {
-        Intent registerIntent = new Intent(this, RegisterForm.class);
-        registerIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(registerIntent);
-        this.finish();
-    }
-
-    private void remindPassword() {
-        Intent forgotPassword = new Intent(this, PasswordForgot.class);
-        forgotPassword.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(forgotPassword);
-        this.finish();
-    }
 }

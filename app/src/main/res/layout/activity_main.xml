@@ -8,6 +8,11 @@
             name="vm"
             type="com.example.papei_firebaseapp.data.viewmodels.MainViewModel" />
     </data>
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -22,7 +27,7 @@
         app:layout_constraintBottom_toTopOf="@+id/usernameTextView"
         android:text="@string/logout"
         android:textAllCaps="false"
-        android:onClick="@{()->vm.logout()}">
+        android:onClick="onClick">
     </Button>
 
     <TextView
@@ -30,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@{vm.username}"
-        app:layout_constraintStart_toBottomOf="@id/logoutBtn"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logoutBtn"
 
@@ -42,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintStart_toBottomOf="@id/usernameTextView"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/usernameTextView"
         android:orientation="vertical"
@@ -76,6 +81,11 @@
     </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.navigation.NavigationView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:menu="@menu/navigation_menu" />
+ </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

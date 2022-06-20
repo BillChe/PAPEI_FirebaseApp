@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/forgot_password"
                 android:layout_marginStart="30dp"
-                android:onClick="onClick"
+                android:focusable="true"
                 android:clickable="true">
             </TextView>
 
@@ -86,8 +86,8 @@
                 app:layout_constraintTop_toTopOf="@+id/forgotPassword"
                 app:layout_constraintLeft_toRightOf="@+id/forgotPassword"
                 android:layout_marginStart="80dp"
-                android:onClick="onClick"
                 android:clickable="true"
+                android:focusable="true"
                 >
             </TextView>
 
