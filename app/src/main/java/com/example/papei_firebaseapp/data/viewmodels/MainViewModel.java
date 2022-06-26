@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModel;
 
 import com.example.papei_firebaseapp.R;
+import com.example.papei_firebaseapp.ui.AllProblems;
 import com.example.papei_firebaseapp.ui.incidents.Incident;
 import com.example.papei_firebaseapp.ui.login.LoginActivity;
 import com.example.papei_firebaseapp.ui.register.RegisterForm;
@@ -64,7 +65,19 @@ public class MainViewModel extends ViewModel {
         context.startActivity(registerIntent);
     }
 
+    public void viewAllIncidents()
+    {
+        Intent viewProblemsIntent = new Intent(context, AllProblems.class);
+        viewProblemsIntent.putExtra("user","no");
+        context.startActivity(viewProblemsIntent);
+    }
 
+    public void viewUserIncidents()
+    {
+        Intent viewProblemsIntent = new Intent(context, AllProblems.class);
+        viewProblemsIntent.putExtra("user","yes");
+        context.startActivity(viewProblemsIntent);
+    }
 
     private void createDirectoryAndSaveFile(Bitmap imageToSave, String fileName) {
 

@@ -3,9 +3,11 @@ package com.example.papei_firebaseapp.ui.login;
 import android.app.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -245,8 +247,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     else
                     {
                         user.sendEmailVerification();
-                        Toast.makeText(LoginActivity.this, LoginActivity.this.getString(R.string.check_email),
-                                Toast.LENGTH_LONG).show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                        builder.setMessage(getString(R.string.check_email))
+                                .setCancelable(true)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        //do things
+                                        dialog.dismiss();
+                                    }
+                                });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+
                     }
 
                 }

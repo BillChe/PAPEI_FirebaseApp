@@ -6,9 +6,11 @@ public class Incident {
     private String userUId;
     String description;
     String date;
-    Location location;
+   // Location location;
     String type;
     String imageUrl;
+    String locationLat;
+    String locationLong;
 
     public Incident() {
     }
@@ -41,13 +43,14 @@ public class Incident {
         this.userUId = userUId;
     }
 
-    public Location getLocation() {
+    /*public Location getLocation() {
         return location;
     }
 
     public void setLocation(Location location) {
         this.location = location;
-    }
+
+    }*/
 
     public String getType() {
         return type;
@@ -63,5 +66,34 @@ public class Incident {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "Incident{" +
+                "userUId='" + userUId + '\'' +
+                ", description='" + description + '\'' +
+                ", date='" + date + '\'' +
+                ", location latitude=" + locationLat +
+                ", location longitude=" + locationLong +
+                ", type='" + type + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                '}';
+    }
+
+    public String getLocationLat() {
+        return locationLat;
+    }
+
+    public void setLocationLat(String locationLat) {
+        this.locationLat = locationLat;
+    }
+
+    public String getLocationLong() {
+        return locationLong;
+    }
+
+    public void setLocationLong(String locationLong) {
+        this.locationLong = locationLong;
     }
 }

@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
@@ -46,12 +47,14 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.io.output.ByteArrayOutputStream;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -242,29 +245,88 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             // Get the Uri of data
             filePath = data.getData();
-            try {
 
-                // Setting image on image view using Bitmap
-                Bitmap bitmap = MediaStore
-                        .Images
-                        .Media
-                        .getBitmap(
-                                getContentResolver(),
-                                filePath);
-                uploadImage();
 
-            } catch (IOException e) {
-                // Log the exception
-                e.printStackTrace();
-            }
+            uploadImage();
+
         }
         if(requestCode == 2 && resultCode == RESULT_OK){
 
             filePath = data.getData();
+            // Setting image on image view using Bitmap
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+           /* Uri tempUri = getImageUri(getApplicationContext(), bitmap);
 
+            // CALL THIS METHOD TO GET THE ACTUAL PATH
+            File finalFile = new File(getRealPathFromURI(tempUri));*/
+            uploadImageFromCamera(bitmap);
 
 
         }
+    }
+
+    public String getRealPathFromURI(Uri uri) {
+        String path = "";
+        if (getContentResolver() != null) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                path = cursor.getString(idx);
+                cursor.close();
+            }
+        }
+        return path;
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        Bitmap OutImage = Bitmap.createScaledBitmap(inImage, 1000, 1000,true);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), OutImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    private void uploadImageFromCamera(Bitmap bitmap) {
+        // Code for showing progressDialog while uploading
+        ProgressDialog progressDialog
+                = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading...");
+        progressDialog.show();
+
+        StorageReference ref
+                = storageReference
+                .child(
+                        "images/"
+                                + UUID.randomUUID().toString());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = ref.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                progressDialog.dismiss();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        imageUrl = uri.toString();
+                        Log.i("image uri vasilis", imageUrl);
+                        report();
+                        progressDialog.dismiss();
+                    }
+                });
+
+
+            }
+        });
     }
 
     @Override
@@ -460,12 +522,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Adding values
         incident.setDescription(incidentDescription);
         incident.setDate(dateNow);
-        incident.setLocation(vm.getLocation());
+        //incident.setLocation(vm.getLocation());
+        incident.setLocationLat(String.valueOf(vm.getLocation().getLatitude()));
+        incident.setLocationLong(String.valueOf(vm.getLocation().getLongitude()));
         incident.setType(incidentType);
         incident.setImageUrl(imageUrl);
         incident.setUserUId(FirebaseAuth.getInstance().getCurrentUser().getUid());
         FirebaseDatabase.getInstance().getReference("Incidents")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push()
+                /*.child(FirebaseAuth.getInstance().getCurrentUser().getUid())*/.push()
                 .setValue(incident)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
