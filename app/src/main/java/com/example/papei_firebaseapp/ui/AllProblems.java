@@ -4,13 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.papei_firebaseapp.R;
 import com.example.papei_firebaseapp.helpers.ListAdapter;
 import com.example.papei_firebaseapp.ui.incidents.Incident;
+import com.example.papei_firebaseapp.ui.login.LoginActivity;
+import com.example.papei_firebaseapp.ui.register.RegisterForm;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -27,17 +32,35 @@ public class AllProblems extends AppCompatActivity {
     ListView listView;
     ArrayList<Incident> arrayList = new ArrayList<>();
     ListAdapter arrayAdapter ;
+    Button viewOnMap;
+    boolean problemsExist= false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_problems);
+        //set views and listener for button
+        viewOnMap = (Button) findViewById(R.id.viewOnMap);
         if(getIntent().getStringExtra("user").equals("yes"))
         {
             showUser = true;
         }
         getAllProblems();
+        viewOnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(problemsExist)
+                intentToMapsView();
+            }
+        });
+    }
 
+
+
+    private void intentToMapsView() {
+        Intent registerIntent = new Intent(AllProblems.this, MapsActivity.class);
+        startActivity(registerIntent);
+        AllProblems.this.finish();
     }
 
     private void getAllProblems() {
@@ -63,6 +86,7 @@ public class AllProblems extends AppCompatActivity {
                         arrayAdapter.notifyDataSetChanged();
                     }
                 }
+                problemsExist = true;
 
             }
 
