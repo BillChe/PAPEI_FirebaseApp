@@ -53,7 +53,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mAuth = FirebaseAuth.getInstance();
 
         //set views
-        //todo
         setViews();
         EditText usernameEditText = binding.username;
         EditText passwordEditText = binding.password;

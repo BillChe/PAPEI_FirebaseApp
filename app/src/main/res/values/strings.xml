@@ -31,4 +31,9 @@
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
     <string name="please_check_data">Please check your data</string>
+    <string name="reported_incident_success">Incident has been reported successfully!</string>
+    <string name="reported_incident__fail">Failed to report, please try again</string>
+
+    <string name="tracking_enabled_notif">Tracking is currently enabled. Tap to cancel.</string>
+    <string name="firebase_path">location</string>
 </resources>

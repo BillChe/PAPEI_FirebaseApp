@@ -57,8 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/report_new"
-            android:textAllCaps="false"
-            android:onClick="@{()->vm.report()}">
+            android:textAllCaps="false">
         </Button>
 
         <Button
