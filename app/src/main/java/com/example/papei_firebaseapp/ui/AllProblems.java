@@ -34,6 +34,7 @@ public class AllProblems extends AppCompatActivity {
     ListAdapter arrayAdapter ;
     Button viewOnMap;
     boolean problemsExist= false;
+    public static ArrayList<Incident> markersArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +87,8 @@ public class AllProblems extends AppCompatActivity {
                         arrayAdapter.notifyDataSetChanged();
                     }
                 }
+                //fill markers array with incidents
+                markersArray.add(incidentTemp);
                 problemsExist = true;
 
             }
