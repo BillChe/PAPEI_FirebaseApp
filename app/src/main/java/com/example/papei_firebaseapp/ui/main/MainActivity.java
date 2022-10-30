@@ -544,7 +544,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         incident.setImageUrl(imageUrl);
         incident.setUserUId(FirebaseAuth.getInstance().getCurrentUser().getUid());
         FirebaseDatabase.getInstance().getReference("Incidents")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push()
+                .push()
                 .setValue(incident)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
