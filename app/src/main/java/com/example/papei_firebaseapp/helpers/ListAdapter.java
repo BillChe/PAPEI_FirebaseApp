@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.papei_firebaseapp.R;
@@ -40,6 +41,8 @@ public class ListAdapter extends ArrayAdapter<Incident> {
             TextView tt1 = (TextView) v.findViewById(R.id.id);
             TextView tt2 = (TextView) v.findViewById(R.id.categoryId);
             TextView tt3 = (TextView) v.findViewById(R.id.description);
+            Button verifyBtn = (Button) v.findViewById(R.id.verifyBtn);
+
 
             if (tt1 != null) {
                 tt1.setText(p.getDescription());

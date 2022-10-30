@@ -47,5 +47,7 @@
     <string name="snow_storm">Snow Storm</string>
     <string name="heavy_rain">Heavy Rain</string>
     <string name="car_accident">Car Accident</string>
+    <string name="verify_incident">Verify Incident</string>
+
 
 </resources>

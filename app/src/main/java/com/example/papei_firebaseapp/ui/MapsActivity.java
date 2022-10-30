@@ -45,10 +45,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String[] problemTypes = {"Road Problem", "Illegal Parking", "Garbage Problem", "Building Problem"};
+                String[] problemTypes = {getString(R.string.fire), getString(R.string.earthquake), getString(R.string.flood),
+                        getString(R.string.heavy_rain),getString(R.string.snow_storm)};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
-                builder.setTitle("Please choose a problem category");
+                builder.setTitle("Please choose category");
                 builder.setItems(problemTypes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
