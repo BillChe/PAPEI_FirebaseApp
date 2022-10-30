@@ -7,6 +7,7 @@
         <variable
             name="vm"
             type="com.example.papei_firebaseapp.data.viewmodels.MainViewModel" />
+        <import type="android.view.View"/>
     </data>
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
@@ -57,7 +58,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/report_new"
-            android:textAllCaps="false">
+            android:textAllCaps="false"
+            android:visibility="@{vm.getIsAdmin?View.GONE:View.VISIBLE}">
         </Button>
 
         <Button
@@ -66,7 +68,8 @@
             android:layout_height="wrap_content"
             android:text="@string/view_all_user_incidents"
             android:textAllCaps="false"
-            android:onClick="@{()->vm.viewUserIncidents()}">
+            android:onClick="@{()->vm.viewUserIncidents()}"
+            android:visibility="@{vm.getIsAdmin?View.GONE:View.VISIBLE}">
         </Button>
         <Button
             android:id="@+id/viewAllIncidents"

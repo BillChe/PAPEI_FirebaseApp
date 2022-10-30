@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.papei_firebaseapp.R;
+import com.example.papei_firebaseapp.data.viewmodels.MainViewModel;
 import com.example.papei_firebaseapp.databinding.ActivityLoginBinding;
 import com.example.papei_firebaseapp.ui.forgotpassword.PasswordForgot;
 import com.example.papei_firebaseapp.ui.main.MainActivity;
@@ -236,8 +237,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 {
                     //check email on firebase
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    if(user.isEmailVerified())
+                    if(user!=null && user.isEmailVerified())
                     {
+                        if(user.getEmail().equals(MainViewModel.emailAmin))
+                        {
+                            MainViewModel.setIsAdmin(true);
+                        }
                         //redirect to Main Activity
                         Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
                         loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

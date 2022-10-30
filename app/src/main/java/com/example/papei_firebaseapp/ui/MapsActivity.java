@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.papei_firebaseapp.R;
+import com.example.papei_firebaseapp.data.viewmodels.MainViewModel;
 import com.example.papei_firebaseapp.ui.incidents.Incident;
 import com.example.papei_firebaseapp.ui.main.MainActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -54,21 +55,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // the user clicked on colors[which]
-                        if( problemTypes[which].equals("Road Problem"))
+                        if( problemTypes[which].equals(getString(R.string.earthquake)))
                         {
-                            incidentType = "Road Problem";
+                            incidentType = getString(R.string.earthquake);
                         }
-                        else if ( problemTypes[which].equals("Illegal Parking"))
+                        else if ( problemTypes[which].equals(getString(R.string.flood)))
                         {
-                            incidentType = "Illegal Parking";
+                            incidentType = getString(R.string.flood);
                         }
-                        else if ( problemTypes[which].equals("Garbage Problem"))
+                        else if ( problemTypes[which].equals(getString(R.string.fire)))
                         {
-                            incidentType = "Garbage Problem";
+                            incidentType = getString(R.string.fire);
                         }
-                        else if ( problemTypes[which].equals("Building Problem"))
+                        else if ( problemTypes[which].equals(getString(R.string.heavy_rain)))
                         {
-                            incidentType = "Building Problem";
+                            incidentType = getString(R.string.heavy_rain);
                         }
 
                         filterProblems();
@@ -138,12 +139,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng last = null;
         ArrayList<Incident> markersArray = AllProblems.markersArray;
         for(int i = 0 ; i < markersArray.size() ; i++) {
+            //show all incidents for admin
+            if(MainViewModel.getIsAdmin() )
+            {
+                createMarker(Double.parseDouble(markersArray.get(i).getLocationLat()), Double.parseDouble(markersArray.get(i).getLocationLong()), markersArray.get(i).getType(),
+                        markersArray.get(i).getDescription()+" "+
+                                markersArray.get(i).getDate());
+                last= new LatLng(Double.parseDouble(markersArray.get(i).getLocationLat()), Double.parseDouble(markersArray.get(i).getLocationLong()));
+            }
+            //show only verified incidents for users
+            else
+            {
+                if(markersArray.get(i).isCheckedByAdmin())
+                {
+                    createMarker(Double.parseDouble(markersArray.get(i).getLocationLat()), Double.parseDouble(markersArray.get(i).getLocationLong()), markersArray.get(i).getType(),
+                            markersArray.get(i).getDescription()+" "+
+                                    markersArray.get(i).getDate());
+                    last= new LatLng(Double.parseDouble(markersArray.get(i).getLocationLat()), Double.parseDouble(markersArray.get(i).getLocationLong()));
+                }
+            }
 
-            createMarker(Double.parseDouble(markersArray.get(i).getLocationLat()), Double.parseDouble(markersArray.get(i).getLocationLong()), markersArray.get(i).getType(),
-                    markersArray.get(i).getDescription()+" "+
-                    markersArray.get(i).getDate());
-            last= new LatLng(Double.parseDouble(markersArray.get(i).getLocationLat()), Double.parseDouble(markersArray.get(i).getLocationLong()));
         }
+        if(last!=null)
         mMap.moveCamera(CameraUpdateFactory.newLatLng(last));
 
     }

@@ -33,6 +33,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MainViewModel extends ViewModel {
+    //Personal Email for Admin
+    public static String emailAmin = "vasos.red.7@gmail.com";
+    //helper boolean
+    public static boolean isAdmin = false;
+
     private String username;
     private Location location;
     Context context;
@@ -53,16 +58,6 @@ public class MainViewModel extends ViewModel {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public void logout()
-    {
-        //sign out firebase user
-        FirebaseAuth.getInstance().signOut();
-        //intent to Login Activity
-        Intent registerIntent = new Intent(context, LoginActivity.class);
-        registerIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        context.startActivity(registerIntent);
     }
 
     public void viewAllIncidents()
@@ -109,10 +104,13 @@ public class MainViewModel extends ViewModel {
         this.location = location;
     }
 
+    public static boolean getIsAdmin() {
+        return isAdmin;
+    }
 
-
-
-
+    public static void setIsAdmin(boolean isAdmin) {
+        MainViewModel.isAdmin = isAdmin;
+    }
 
 
 }

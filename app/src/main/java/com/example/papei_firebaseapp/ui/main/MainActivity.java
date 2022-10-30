@@ -114,7 +114,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         binding.setVm(vm);
         context = MainActivity.this;
-
+        //check email on firebase
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user!=null&&user.isEmailVerified()) {
+            if (user.getEmail().equals(MainViewModel.emailAmin)) {
+                MainViewModel.setIsAdmin(true);
+            }
+        }
         report = findViewById(R.id.report);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -161,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if(incidentTemp.isCheckedByAdmin() && checkLocation(incidentTemp) &&
                         !incidentTemp.getNotifiedUsersId().contains(FirebaseAuth.getInstance().getUid())
+                        && !MainViewModel.getIsAdmin()
                 )
                 {
                     //get city name here with Geocoder

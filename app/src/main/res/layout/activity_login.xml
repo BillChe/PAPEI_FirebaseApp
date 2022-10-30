@@ -12,40 +12,65 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
         tools:context=".ui.login.LoginActivity"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:background="@color/purple_700">
 
-        <EditText
-            android:id="@+id/username"
-            android:layout_width="0dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etUsernameLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="96dp"
-            android:hint="@string/prompt_email"
-            android:inputType="textEmailAddress"
-            android:selectAllOnFocus="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:background="@color/bloodred"
+            android:backgroundTint="@color/white"
+            app:hintTextColor="@color/white">
+            <EditText
 
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="0dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:background="@color/bloodred"
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_email"
+
+                android:inputType="textEmailAddress"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordTextInputLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/white"
             android:layout_marginTop="8dp"
-            android:hint="@string/prompt_password"
-            android:imeActionLabel="@string/action_sign_in_short"
-            android:imeOptions="actionDone"
-            android:inputType="textPassword"
-            android:selectAllOnFocus="true"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/white"
+            android:textColorHint="@color/white"
+            app:hintTextColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/username" />
+            app:layout_constraintTop_toBottomOf="@+id/etUsernameLayout">
 
+            <EditText
+
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:background="@color/bloodred"
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_password"
+                android:inputType="textPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
         <Button
+            android:background="@drawable/roundedbtn"
             android:id="@+id/login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,29 +78,37 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="64dp"
             android:enabled="false"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/bloodred"
             android:text="@string/login"
+            android:fontFamily="sans-serif-black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password"
+            app:layout_constraintTop_toBottomOf="@+id/passwordTextInputLayout"
             app:layout_constraintVertical_bias="0.2" />
 
         <LinearLayout
+            android:id="@+id/extraBtnsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/img"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login">
 
             <TextView
+                android:textColor="@color/white"
                 android:id="@+id/forgotPassword"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/forgot_password"
-                android:layout_marginStart="30dp"
                 android:focusable="true"
-                android:clickable="true">
+                android:clickable="true"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:fontFamily="sans-serif-black">
             </TextView>
 
             <TextView
@@ -83,16 +116,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/register"
-                app:layout_constraintTop_toTopOf="@+id/forgotPassword"
-                app:layout_constraintLeft_toRightOf="@+id/forgotPassword"
-                android:layout_marginStart="80dp"
+                android:textColor="@color/white"
                 android:clickable="true"
                 android:focusable="true"
-                >
+                android:layout_weight="1"
+                android:gravity="center"
+                android:fontFamily="sans-serif-black">
             </TextView>
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/img"
+            android:src="@drawable/papei_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintHeight_max="60dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/extraBtnsLayout">
+
+        </ImageView>
         <ProgressBar
             android:id="@+id/loading"
             android:layout_width="wrap_content"
@@ -102,8 +147,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.2"
-            />
+            app:layout_constraintVertical_bias="0.2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

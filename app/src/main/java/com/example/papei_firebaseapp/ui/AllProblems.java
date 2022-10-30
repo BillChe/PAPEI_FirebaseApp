@@ -6,15 +6,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.papei_firebaseapp.R;
+import com.example.papei_firebaseapp.data.viewmodels.MainViewModel;
 import com.example.papei_firebaseapp.helpers.ListAdapter;
 import com.example.papei_firebaseapp.ui.incidents.Incident;
 import com.example.papei_firebaseapp.ui.login.LoginActivity;
+import com.example.papei_firebaseapp.ui.main.MainActivity;
 import com.example.papei_firebaseapp.ui.register.RegisterForm;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -40,6 +43,10 @@ public class AllProblems extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_problems);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Incidents");
+
         //set views and listener for button
         viewOnMap = (Button) findViewById(R.id.viewOnMap);
         if(getIntent().getStringExtra("user").equals("yes"))
@@ -76,10 +83,19 @@ public class AllProblems extends AppCompatActivity {
                 //UPDATE INCIDENT ID TO HAVE THEM DISTINCT BY KEY
                /* String incidentUid =  database.push().getKey();
                 incidentTemp.setIncidentUid(incidentUid);*/
-                if(!showUser)
+                if(!showUser && MainViewModel.getIsAdmin())
                 {
                     arrayList.add(incidentTemp);
                     arrayAdapter.notifyDataSetChanged();
+                }
+                //show only verified incidents
+                else if(!showUser && !MainViewModel.getIsAdmin())
+                {
+                    if(incidentTemp.isCheckedByAdmin())
+                    {
+                        arrayList.add(incidentTemp);
+                        arrayAdapter.notifyDataSetChanged();
+                    }
                 }
                 else
                 {
@@ -117,5 +133,27 @@ public class AllProblems extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent loginIntent = new Intent(AllProblems.this, MainActivity.class);
+                loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(loginIntent);
+                finish();
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent loginIntent = new Intent(AllProblems.this, MainActivity.class);
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(loginIntent);
+        finish();
     }
 }

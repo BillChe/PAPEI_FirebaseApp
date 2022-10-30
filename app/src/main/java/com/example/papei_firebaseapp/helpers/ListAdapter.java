@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.papei_firebaseapp.R;
+import com.example.papei_firebaseapp.data.viewmodels.MainViewModel;
 import com.example.papei_firebaseapp.ui.incidents.Incident;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -66,47 +67,68 @@ public class ListAdapter extends ArrayAdapter<Incident> {
                 tt3.setText(p.getDate());
             }
 
-            if(verifyBtn!=null)
+            if(MainViewModel.getIsAdmin())
             {
-                String key = p.getIncidentUid();
-                verifyBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        DatabaseReference ref= FirebaseDatabase.getInstance().getReference().child("Incidents");
-                        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                Iterable<DataSnapshot> userChildren = dataSnapshot.getChildren();
-
-                                for (DataSnapshot user: userChildren) {
-                                    Incident u = user.getValue(Incident.class);
-                                    if(u.getIncidentUid()!=null){
 
 
-                                    if(u.getIncidentUid().equals(key)){
+            if(verifyBtn!=null )
+            {
+                //if verified incident disable button to verify
+                if(p.isCheckedByAdmin())
+                {
+                    verifyBtn.setEnabled(false);
+                    verifyBtn.setText(getContext().getString(R.string.verified_incident));
+                }
+                //if NOT verified incident set click listener to enable verification from Admin
+                else
+                {
+                    String key = p.getIncidentUid();
+                    verifyBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            DatabaseReference ref= FirebaseDatabase.getInstance().getReference().child("Incidents");
+                            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    Iterable<DataSnapshot> userChildren = dataSnapshot.getChildren();
 
-                                        Toast.makeText(getContext(), "Incident Verified!",
-                                                Toast.LENGTH_LONG).show();
-
-                                        Map<String, Object> updates = new HashMap<String,Object>();
-                                        updates.put("checkedByAdmin", true);
-                                        updates.put("notifiedUsersId", "");
-                                        ref.child(u.getIncidentUid()).updateChildren(updates);
+                                    for (DataSnapshot user: userChildren) {
+                                        Incident u = user.getValue(Incident.class);
+                                        if(u.getIncidentUid()!=null){
 
 
+                                            if(u.getIncidentUid().equals(key)){
+
+                                                Toast.makeText(getContext(), "Incident Verified!",
+                                                        Toast.LENGTH_LONG).show();
+
+                                                Map<String, Object> updates = new HashMap<String,Object>();
+                                                updates.put("checkedByAdmin", true);
+                                                updates.put("notifiedUsersId", "");
+                                                ref.child(u.getIncidentUid()).updateChildren(updates);
+
+
+                                            }
+                                        }
                                     }
                                 }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
                                 }
-                            }
+                            });
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
+                    });
+                }
 
-                            }
-                        });
-
-                    }
-                });
+            }
+         }
+            //user not admin hide verify incident button here
+            else
+            {
+                verifyBtn.setVisibility(View.GONE);
             }
         }
 
