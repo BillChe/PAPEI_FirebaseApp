@@ -73,6 +73,9 @@ public class AllProblems extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Incident incidentTemp = snapshot.getValue(Incident.class);
+                //UPDATE INCIDENT ID TO HAVE THEM DISTINCT BY KEY
+               /* String incidentUid =  database.push().getKey();
+                incidentTemp.setIncidentUid(incidentUid);*/
                 if(!showUser)
                 {
                     arrayList.add(incidentTemp);

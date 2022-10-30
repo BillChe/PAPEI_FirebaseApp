@@ -48,6 +48,7 @@
     <string name="heavy_rain">Heavy Rain</string>
     <string name="car_accident">Car Accident</string>
     <string name="verify_incident">Verify Incident</string>
-
+    <string name="city">City</string>
+    <string name="at"> at </string>
 
 </resources>

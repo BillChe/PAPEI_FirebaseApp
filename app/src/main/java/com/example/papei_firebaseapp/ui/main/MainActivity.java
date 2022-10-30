@@ -8,12 +8,14 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
-import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,15 +23,17 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,7 +43,6 @@ import android.widget.Toast;
 import com.example.papei_firebaseapp.R;
 import com.example.papei_firebaseapp.data.viewmodels.MainViewModel;
 import com.example.papei_firebaseapp.databinding.ActivityMainBinding;
-import com.example.papei_firebaseapp.helpers.IncidentType;
 import com.example.papei_firebaseapp.ui.incidents.Incident;
 import com.example.papei_firebaseapp.ui.login.LoginActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -51,13 +54,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.io.output.ByteArrayOutputStream;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -65,6 +71,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -137,6 +144,109 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+    }
+
+    //checking for updated Incidents for User Mode
+    private void checkForIncidents() {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("Incidents");
+        database.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Incident incidentTemp = snapshot.getValue(Incident.class);
+                //first we check if is verified by an Admin
+                //check only verified and close to User location problems to notify!
+                if(currentLocation!=null)
+                {
+
+
+                if(incidentTemp.isCheckedByAdmin() && checkLocation(incidentTemp) &&
+                        !incidentTemp.getNotifiedUsersId().contains(FirebaseAuth.getInstance().getUid())
+                )
+                {
+                    //get city name here with Geocoder
+                    Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+                    List<Address> addresses = null;
+                    String cityName = "";//addresses.get(0).getAddressLine(0);
+                    String stateName = "";//addresses.get(0).getAddressLine(1);
+                    String countryName = "";//addresses.get(0).getAddressLine(2);
+                    try {
+                        addresses = geocoder.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
+                        cityName = addresses.get(0).getAddressLine(0);
+                        countryName = addresses.get(0).getAddressLine(2);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    String descriptionNotification = incidentTemp.getDescription()!=null?incidentTemp.getDescription():
+                            incidentTemp.getType()+ "Incident at";
+                    //show a notification to alert user for near Incident
+                    NotificationCompat.Builder mBuilder =   new NotificationCompat.Builder(MainActivity.this)
+                            .setSmallIcon(R.mipmap.ic_launcher) // notification icon
+                            .setStyle(new NotificationCompat.BigTextStyle().bigText( descriptionNotification
+                                    +" "+ getString(R.string.at)+" " + cityName  ))
+                            .setContentTitle(incidentTemp.getType() ) // title for notification
+                            .setVibrate(new long[] { 500, 500, 500, 500, 500 })// add vibration
+                            .setAutoCancel(true); // clear notification after click
+                    //add sound
+                    try {
+                        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                        Ringtone r = RingtoneManager.getRingtone(context, uri);
+                        r.play();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    NotificationManager mNotificationManager =
+                            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    mNotificationManager.notify(0, mBuilder.build());
+                    Map<String, Object> updates = new HashMap<String,Object>();
+                    updates.put("notifiedUsersId", FirebaseAuth.getInstance().getUid());
+                    database.child(incidentTemp.getIncidentUid()).updateChildren(updates);
+
+                }
+
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    private boolean checkLocation(Incident incidentTemp) {
+        Location locationA = new Location("point A");
+
+        locationA.setLatitude(currentLocation.getLatitude());
+        locationA.setLongitude(currentLocation.getLongitude());
+
+        Location locationB = new Location("point B");
+
+        locationB.setLatitude(Double.parseDouble(incidentTemp.getLocationLat()));
+        locationB.setLongitude(Double.parseDouble(incidentTemp.getLocationLong()));
+
+        float distance = locationA.distanceTo(locationB);
+        if(distance<4000)
+        {
+            return true;
+        }
+        return false;
 
     }
 
@@ -186,6 +296,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             fetchLastLocation();
 
         }
+        checkForIncidents();
 
     }
 
@@ -544,6 +655,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         incident.setLocationLong(String.valueOf(vm.getLocation().getLongitude()));
         incident.setType(incidentType);
         incident.setImageUrl(imageUrl);
+        incident.setNotifiedUsersId("");
+        String incidentUid =  FirebaseDatabase.getInstance().getReference("Incidents").push().getKey();
+        incident.setIncidentUid(incidentUid);
         incident.setUserUId(FirebaseAuth.getInstance().getCurrentUser().getUid());
         FirebaseDatabase.getInstance().getReference("Incidents")
                 .push()

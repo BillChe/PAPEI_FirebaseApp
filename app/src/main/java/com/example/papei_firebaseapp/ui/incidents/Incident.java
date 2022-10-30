@@ -2,6 +2,8 @@ package com.example.papei_firebaseapp.ui.incidents;
 
 import android.location.Location;
 
+import java.util.ArrayList;
+
 public class Incident {
     private String userUId;
     String description;
@@ -13,6 +15,9 @@ public class Incident {
     String locationLong;
     //todo add staff for admin
     boolean isCheckedByAdmin = false;
+    String incidentUid = "";
+
+    String notifiedUsersId ;
 
     public Incident() {
     }
@@ -106,4 +111,21 @@ public class Incident {
     public void setCheckedByAdmin(boolean checkedByAdmin) {
         isCheckedByAdmin = checkedByAdmin;
     }
+
+    public String getIncidentUid() {
+        return incidentUid;
+    }
+
+    public void setIncidentUid(String incidentUid) {
+        this.incidentUid = incidentUid;
+    }
+
+    public String getNotifiedUsersId() {
+        return notifiedUsersId;
+    }
+
+    public void setNotifiedUsersId(String notifiedUsersId) {
+        this.notifiedUsersId = notifiedUsersId;
+    }
+
 }
