@@ -11,11 +11,13 @@
             android:id="@+id/id"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="id" android:textStyle="bold"
+            android:text="id"
+            android:textStyle="bold"
             android:gravity="left"
             android:layout_weight="1"
             android:typeface="monospace"
-            android:height="40sp" />
+            android:height="40dp"
+            android:textSize="20sp"/>
     </TableRow>
 
     <TableRow android:layout_height="wrap_content"
@@ -27,7 +29,8 @@
             android:layout_height="wrap_content"
             android:text="categoryId"
             android:layout_weight="1"
-            android:height="20sp" />
+            android:height="25dp"
+            android:textSize="20sp" />
 
         <TextView android:layout_height="wrap_content"
             android:layout_width="fill_parent"
@@ -35,7 +38,34 @@
             android:gravity="right"
             android:id="@+id/description"
             android:text="description"
-            android:height="20sp" />
+            android:height="25dp"
+            android:textSize="20sp"/>
+    </TableRow>
+
+    <TableRow android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:id="@+id/TableRow02">
+
+        <TextView
+            android:id="@+id/type"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Score"
+            android:layout_weight="1"
+            android:height="25dp"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-medium" />
+
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Score"
+            android:layout_weight="1"
+            android:height="25dp"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-medium"
+           />
     </TableRow>
 
 </TableLayout>

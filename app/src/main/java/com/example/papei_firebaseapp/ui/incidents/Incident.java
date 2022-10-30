@@ -11,6 +11,8 @@ public class Incident {
     String imageUrl;
     String locationLat;
     String locationLong;
+    //todo add staff for admin
+    boolean isCheckedByAdmin = false;
 
     public Incident() {
     }
@@ -95,5 +97,13 @@ public class Incident {
 
     public void setLocationLong(String locationLong) {
         this.locationLong = locationLong;
+    }
+
+    public boolean isCheckedByAdmin() {
+        return isCheckedByAdmin;
+    }
+
+    public void setCheckedByAdmin(boolean checkedByAdmin) {
+        isCheckedByAdmin = checkedByAdmin;
     }
 }

@@ -65,7 +65,7 @@ public class AllProblems extends AppCompatActivity {
     }
 
     private void getAllProblems() {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference("Incidents");
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("Incidents/"+FirebaseAuth.getInstance().getUid());
         listView = (ListView) findViewById(R.id.problemsListView);
         arrayAdapter = new ListAdapter(this, R.layout.itemlist,arrayList);
         listView.setAdapter(arrayAdapter);

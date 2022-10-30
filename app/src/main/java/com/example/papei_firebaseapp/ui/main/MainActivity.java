@@ -39,7 +39,9 @@ import android.widget.Toast;
 import com.example.papei_firebaseapp.R;
 import com.example.papei_firebaseapp.data.viewmodels.MainViewModel;
 import com.example.papei_firebaseapp.databinding.ActivityMainBinding;
+import com.example.papei_firebaseapp.helpers.IncidentType;
 import com.example.papei_firebaseapp.ui.incidents.Incident;
+import com.example.papei_firebaseapp.ui.login.LoginActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -47,6 +49,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.io.output.ByteArrayOutputStream;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -91,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     FirebaseStorage storage;
     StorageReference storageReference;
     String imageUrl ="";
+    FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,19 +106,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.setVm(vm);
         context = MainActivity.this;
 
-        // drawer layout instance to toggle the menu icon to open
-        // drawer and back button to close drawer
-        drawerLayout = findViewById(R.id.drawer_layout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
-
         report = findViewById(R.id.report);
-        // pass the Open and Close toggle for the drawer layout listener
-        // to toggle the button
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
 
-        // to make the Navigation drawer icon always appear on the action bar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                if (firebaseUser == null) {
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                }
+
+            }
+
+        };
+
         // get the Firebase  storage reference
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
@@ -150,9 +160,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.logoutBtn:
-                //todo check here if is needed, finish might always return to Login Screen
-                //todo review
-                vm.logout();
+                //sign out firebase user
+                FirebaseAuth.getInstance().signOut();
+                //intent to Login Activity
+                Intent registerIntent = new Intent(MainActivity.this, LoginActivity.class);
+                registerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(registerIntent);
+                //vm.logout();
                 finish();
             default:
 
@@ -413,7 +427,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
     public void buildSelectTypeMessage() {
-        String[] problemTypes = {"Road Problem", "Illegal Parking", "Garbage Problem", "Building Problem"};
+        String[] problemTypes = {getString(R.string.fire), getString(R.string.earthquake), getString(R.string.flood),
+                getString(R.string.heavy_rain),getString(R.string.snow_storm)};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Please choose a problem category");
@@ -421,21 +436,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // the user clicked on colors[which]
-                if( problemTypes[which].equals("Road Problem"))
+                if( problemTypes[which].equals(getString(R.string.earthquake)))
                 {
-                    incidentType = "Road Problem";
+                    incidentType = getString(R.string.earthquake);
                 }
-                else if ( problemTypes[which].equals("Illegal Parking"))
+                else if ( problemTypes[which].equals(getString(R.string.flood)))
                 {
-                    incidentType = "Illegal Parking";
+                    incidentType = getString(R.string.flood);
                 }
-                else if ( problemTypes[which].equals("Garbage Problem"))
+                else if ( problemTypes[which].equals(getString(R.string.fire)))
                 {
-                    incidentType = "Garbage Problem";
+                    incidentType = getString(R.string.fire);
                 }
-                else if ( problemTypes[which].equals("Building Problem"))
+                else if ( problemTypes[which].equals(getString(R.string.heavy_rain)))
                 {
-                    incidentType = "Building Problem";
+                    incidentType = getString(R.string.heavy_rain);
                 }
 
                 buildAddDesciptionMessage(incidentType);
@@ -529,7 +544,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         incident.setImageUrl(imageUrl);
         incident.setUserUId(FirebaseAuth.getInstance().getCurrentUser().getUid());
         FirebaseDatabase.getInstance().getReference("Incidents")
-                /*.child(FirebaseAuth.getInstance().getCurrentUser().getUid())*/.push()
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push()
                 .setValue(incident)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

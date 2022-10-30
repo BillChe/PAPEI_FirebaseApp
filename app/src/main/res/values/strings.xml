@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PAPEI_FirebaseApp</string>
+    <string name="app_name">Smart Alert</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -38,4 +38,14 @@
     <string name="firebase_path">location</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="viewmap">View On Map</string>
+
+
+   <!-- Incident literals-->
+    <string name="earthquake">Earthquake</string>
+    <string name="fire">Fire</string>
+    <string name="flood">Flood</string>
+    <string name="snow_storm">Snow Storm</string>
+    <string name="heavy_rain">Heavy Rain</string>
+    <string name="car_accident">Car Accident</string>
+
 </resources>
