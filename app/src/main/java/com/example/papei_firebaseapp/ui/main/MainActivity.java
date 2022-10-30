@@ -95,6 +95,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     StorageReference storageReference;
     String imageUrl ="";
     FirebaseAuth.AuthStateListener authStateListener;
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -647,5 +649,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 }
                             });
         }
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseAuth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        firebaseAuth.removeAuthStateListener(authStateListener);
     }
 }

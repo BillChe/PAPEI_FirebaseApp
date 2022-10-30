@@ -57,6 +57,7 @@ public class ListAdapter extends ArrayAdapter<Incident> {
             }
         }
 
+
         return v;
     }
 
