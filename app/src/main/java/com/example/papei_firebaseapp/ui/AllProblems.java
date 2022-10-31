@@ -83,32 +83,38 @@ public class AllProblems extends AppCompatActivity {
                 //UPDATE INCIDENT ID TO HAVE THEM DISTINCT BY KEY
                /* String incidentUid =  database.push().getKey();
                 incidentTemp.setIncidentUid(incidentUid);*/
+                //show all results for Admin
                 if(!showUser && MainViewModel.getIsAdmin())
                 {
                     arrayList.add(incidentTemp);
                     arrayAdapter.notifyDataSetChanged();
+                    //fill markers array with incidents
+                    markersArray.add(incidentTemp);
+                    problemsExist = true;
                 }
-                //show only verified incidents
+                //show only verified incidents for simple User
                 else if(!showUser && !MainViewModel.getIsAdmin())
                 {
                     if(incidentTemp.isCheckedByAdmin())
                     {
                         arrayList.add(incidentTemp);
                         arrayAdapter.notifyDataSetChanged();
+                        markersArray.add(incidentTemp);
+                        problemsExist = true;
                     }
                 }
                 else
                 {
-                    //show only user related problems
+                    //show only user related incidents for User
                     if(incidentTemp.getUserUId().equals(FirebaseAuth.getInstance().getUid()))
                     {
                         arrayList.add(incidentTemp);
                         arrayAdapter.notifyDataSetChanged();
+                        markersArray.add(incidentTemp);
+                        problemsExist = true;
                     }
                 }
-                //fill markers array with incidents
-                markersArray.add(incidentTemp);
-                problemsExist = true;
+
 
             }
 
