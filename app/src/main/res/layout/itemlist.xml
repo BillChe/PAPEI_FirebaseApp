@@ -44,13 +44,14 @@
             android:fontFamily="sans-serif-medium"/>
     </TableRow>
 
-    <TableRow android:layout_width="fill_parent"
+    <TableRow android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/TableRow08"
-        android:gravity="center">
+        android:gravity="center"
+        >
         <Button
             android:id="@+id/verifyBtn"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/verify_incident"
             android:fontFamily="sans-serif-medium"
@@ -60,7 +61,7 @@
             android:layout_margin="5dp"/>
         <Button
             android:id="@+id/deleteBtn"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/delete_incident"
             android:fontFamily="sans-serif-medium"

@@ -597,7 +597,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 {
                     incidentType = getString(R.string.heavy_rain);
                 }
-
+                else if ( problemTypes[which].equals(getString(R.string.snow_storm)))
+                {
+                    incidentType = getString(R.string.snow_storm);
+                }
                 buildAddDesciptionMessage(incidentType);
             }
         });
