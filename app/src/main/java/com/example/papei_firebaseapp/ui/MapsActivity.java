@@ -71,6 +71,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         {
                             incidentType = getString(R.string.heavy_rain);
                         }
+                        else if ( problemTypes[which].equals(getString(R.string.snow_storm)))
+                        {
+                            incidentType = getString(R.string.snow_storm);
+                        }
 
                         filterProblems();
                     }
