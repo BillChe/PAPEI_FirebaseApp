@@ -39,9 +39,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.papei_firebaseapp.R;
+import com.example.papei_firebaseapp.data.User;
 import com.example.papei_firebaseapp.data.viewmodels.MainViewModel;
 import com.example.papei_firebaseapp.databinding.ActivityMainBinding;
 import com.example.papei_firebaseapp.ui.incidents.Incident;
@@ -60,6 +62,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -104,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String imageUrl ="";
     FirebaseAuth.AuthStateListener authStateListener;
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-
+    TextView usernameTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         report = findViewById(R.id.report);
-
+        usernameTextView = findViewById(R.id.usernameText);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -237,6 +240,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Users");
+        ref.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User currentUser = dataSnapshot.child(FirebaseAuth.getInstance().getUid()).getValue(User.class);
+                        //Get map of users in datasnapshot
+                        username = collectUsername((Map<String,Object>) dataSnapshot.getValue());
+                        usernameTextView.setText("Welcome "+ username);
+                        vm.setUsername(username);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        //handle databaseError
+                    }
+                });
+
 
     }
 
@@ -774,6 +796,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             });
         }
     }
+
+    private String collectUsername(Map<String, Object> value) {
+        String name = "";
+
+        //iterate through each user, ignoring their UID
+        for (Map.Entry<String, Object> entry : value.entrySet()){
+            //Get user map
+            Map singleUser = (Map) entry.getValue();
+            if(singleUser.get("email").equals(FirebaseAuth.getInstance().getCurrentUser().getEmail()))
+            {
+                //Get username field
+                name = singleUser.get("username").toString();
+            }
+        }
+        return name;
+    }
+
     @Override
     protected void onStart() {
         super.onStart();

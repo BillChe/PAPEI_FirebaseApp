@@ -25,18 +25,20 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/usernameTextView"
+        app:layout_constraintBottom_toTopOf="@+id/usernameText"
         android:text="@string/logout"
         android:textAllCaps="false"
         android:onClick="onClick">
     </Button>
 
     <TextView
-        android:id="@+id/usernameTextView"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/bloodred"
+        android:id="@+id/usernameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@{vm.username}"
-
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logoutBtn"
 
@@ -50,12 +52,14 @@
         app:layout_constraintStart_toStartOf="parent"
 
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/usernameText"
         android:orientation="vertical"
         android:layout_marginTop="30dp">
         <Button
+            android:background="@drawable/roundedbtn"
+            android:layout_margin="8dp"
             android:id="@+id/report"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/report_new"
             android:textAllCaps="false"
@@ -63,8 +67,10 @@
         </Button>
 
         <Button
+            android:background="@drawable/roundedbtn"
+            android:layout_margin="8dp"
             android:id="@+id/viewUserIncidents"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/view_all_user_incidents"
             android:textAllCaps="false"
@@ -72,10 +78,11 @@
             android:visibility="@{vm.getIsAdmin?View.GONE:View.VISIBLE}">
         </Button>
         <Button
+            android:background="@drawable/roundedbtn"
+            android:layout_margin="8dp"
             android:id="@+id/viewAllIncidents"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:text="@string/view_all_incidents"
             android:textAllCaps="false"
             android:onClick="@{()->vm.viewAllIncidents()}">

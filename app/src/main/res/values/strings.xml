@@ -25,7 +25,7 @@
     <string name="reset_password">RESET PASSWORD</string>
     <string name="reset_password_email">Check your email to reset your password</string>
     <string name="enter_valid_email_try_again">Please enter a valid email and try again</string>
-    <string name="report_new">Report new incident</string>
+    <string name="report_new">Report New Incident</string>
     <string name="view_all_user_incidents">My Incidents</string>
     <string name="view_all_incidents">View All Incidents</string>
     <string name="nav_open">Open</string>
