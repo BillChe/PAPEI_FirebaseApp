@@ -328,6 +328,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             fetchLastLocation();
 
         }
+        if(!MainViewModel.getIsAdmin())
         checkForIncidents();
 
     }
