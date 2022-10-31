@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -187,7 +188,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             incidentTemp.getType()+ "Incident at";
                     //show a notification to alert user for near Incident
                     NotificationCompat.Builder mBuilder =   new NotificationCompat.Builder(MainActivity.this)
-                            .setSmallIcon(R.mipmap.ic_launcher) // notification icon
+                            .setColor(getResources().getColor(R.color.transp))
+                            .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.papeiimg))
+                            .setSmallIcon(R.drawable.papeiimg) // notification icon
                             .setStyle(new NotificationCompat.BigTextStyle().bigText( descriptionNotification
                                     +" "+ getString(R.string.at)+" " + cityName  ))
                             .setContentTitle(incidentTemp.getType() ) // title for notification

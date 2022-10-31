@@ -15,4 +15,6 @@
     <color name="green_500">#00A956</color>
     <color name="red">#ff0000</color>
     <color name="bloodred">#880808</color>
+    <color name="transp">#00880808</color>
+
 </resources>
