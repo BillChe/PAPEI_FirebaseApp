@@ -51,5 +51,6 @@
     <string name="verified_incident">Verified Incident</string>
     <string name="city">City</string>
     <string name="at">at</string>
+    <string name="delete_incident">Delete Incident</string>
 
 </resources>

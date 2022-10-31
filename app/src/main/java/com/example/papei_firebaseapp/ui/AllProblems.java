@@ -125,7 +125,10 @@ public class AllProblems extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
+                arrayList.clear();
+                arrayAdapter.clear();
+                markersArray.clear();
+                getAllProblems();
             }
 
             @Override

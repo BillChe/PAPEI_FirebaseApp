@@ -54,7 +54,7 @@ public class ListAdapter extends ArrayAdapter<Incident> {
             TextView tt2 = (TextView) v.findViewById(R.id.categoryId);
             TextView tt3 = (TextView) v.findViewById(R.id.description);
             Button verifyBtn = (Button) v.findViewById(R.id.verifyBtn);
-
+            Button deleteBtn = (Button) v.findViewById(R.id.deleteBtn);
             if (tt1 != null) {
                 tt1.setText(p.getDescription());
             }
@@ -70,12 +70,53 @@ public class ListAdapter extends ArrayAdapter<Incident> {
             if(MainViewModel.getIsAdmin())
             {
 
+                if(deleteBtn!=null ) {
+                    //if verified incident disable button to verify
+                    if (p.isCheckedByAdmin()) {
+                        deleteBtn.setEnabled(false);
+                    }
+                    else
+                    {
+                        String key = p.getIncidentUid();
+                        deleteBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                DatabaseReference ref= FirebaseDatabase.getInstance().getReference().child("Incidents");
+                                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        Iterable<DataSnapshot> userChildren = dataSnapshot.getChildren();
+                                        for (DataSnapshot user: userChildren) {
+                                            Incident u = user.getValue(Incident.class);
+                                            if(u.getIncidentUid()!=null){
+                                                if(u.getIncidentUid().equals(key)){
+                                                    user.getRef().removeValue();
+                                                    Toast.makeText(getContext(), "Incident Deleted!",
+                                                            Toast.LENGTH_LONG).show();
+
+
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+                            }
+                        });
+                    }
+                }
 
             if(verifyBtn!=null )
             {
                 //if verified incident disable button to verify
                 if(p.isCheckedByAdmin())
                 {
+
                     verifyBtn.setEnabled(false);
                     verifyBtn.setText(getContext().getString(R.string.verified_incident));
                 }
@@ -129,6 +170,7 @@ public class ListAdapter extends ArrayAdapter<Incident> {
             else
             {
                 verifyBtn.setVisibility(View.GONE);
+                deleteBtn.setVisibility(View.GONE);
             }
         }
 
