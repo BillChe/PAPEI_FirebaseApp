@@ -168,7 +168,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(currentLocation!=null)
                 {
 
-
+                //todo watch out set here the key value as temp incident's id
+                String id = snapshot.getKey();
                 if(incidentTemp.isCheckedByAdmin() && checkLocation(incidentTemp) &&
                         !incidentTemp.getNotifiedUsersId().contains(FirebaseAuth.getInstance().getUid())
                         && !MainViewModel.getIsAdmin()
@@ -212,7 +213,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mNotificationManager.notify(0, mBuilder.build());
                     Map<String, Object> updates = new HashMap<String,Object>();
                     updates.put("notifiedUsersId", FirebaseAuth.getInstance().getUid());
-                    database.child(incidentTemp.getIncidentUid()).updateChildren(updates);
+                    //todo watch out correct id update here logic is that the incident uid is null upon creation!!
+                    database.child(id).updateChildren(updates);
 
                 }
 
@@ -693,7 +695,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         incident.setImageUrl(imageUrl);
         incident.setNotifiedUsersId("");
         String incidentUid =  FirebaseDatabase.getInstance().getReference("Incidents").push().getKey();
-        incident.setIncidentUid(incidentUid);
+        incident.setIncidentUid("");
         incident.setUserUId(FirebaseAuth.getInstance().getCurrentUser().getUid());
         FirebaseDatabase.getInstance().getReference("Incidents")
                 .push()

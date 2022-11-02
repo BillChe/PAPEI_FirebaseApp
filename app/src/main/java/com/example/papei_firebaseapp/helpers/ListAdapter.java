@@ -135,10 +135,12 @@ public class ListAdapter extends ArrayAdapter<Incident> {
 
                                     for (DataSnapshot user: userChildren) {
                                         Incident u = user.getValue(Incident.class);
-                                        if(u.getIncidentUid()!=null){
+                                        //todo watch out set here the key value as temp incident's id
+                                        String id = user.getKey();
+                                        if(id!=null){
 
 
-                                            if(u.getIncidentUid().equals(key)){
+                                            if(id.equals(key)){
 
                                                 Toast.makeText(getContext(), "Incident Verified!",
                                                         Toast.LENGTH_LONG).show();
@@ -146,7 +148,8 @@ public class ListAdapter extends ArrayAdapter<Incident> {
                                                 Map<String, Object> updates = new HashMap<String,Object>();
                                                 updates.put("checkedByAdmin", true);
                                                 updates.put("notifiedUsersId", "");
-                                                ref.child(u.getIncidentUid()).updateChildren(updates);
+                                                //todo watch out correct id update here logic is that the incident uid is null upon creation!!
+                                                ref.child(key).updateChildren(updates);
 
 
                                             }

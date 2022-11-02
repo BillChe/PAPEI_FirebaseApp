@@ -81,8 +81,8 @@ public class AllProblems extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Incident incidentTemp = snapshot.getValue(Incident.class);
                 //UPDATE INCIDENT ID TO HAVE THEM DISTINCT BY KEY
-               /* String incidentUid =  database.push().getKey();
-                incidentTemp.setIncidentUid(incidentUid);*/
+                String incidentUid =  snapshot.getKey();
+                incidentTemp.setIncidentUid(incidentUid);
                 //show all results for Admin
                 if(!showUser && MainViewModel.getIsAdmin())
                 {
