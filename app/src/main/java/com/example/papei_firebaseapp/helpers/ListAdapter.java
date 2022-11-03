@@ -72,11 +72,11 @@ public class ListAdapter extends ArrayAdapter<Incident> {
 
                 if(deleteBtn!=null ) {
                     //if verified incident disable button to verify
-                    if (p.isCheckedByAdmin()) {
-                        deleteBtn.setEnabled(false);
-                    }
-                    else
-                    {
+                //    if (p.isCheckedByAdmin()) {
+                 //       deleteBtn.setEnabled(false);
+                //    }
+                //    else
+                  //  {
                         String key = p.getIncidentUid();
                         deleteBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -88,15 +88,18 @@ public class ListAdapter extends ArrayAdapter<Incident> {
                                         Iterable<DataSnapshot> userChildren = dataSnapshot.getChildren();
                                         for (DataSnapshot user: userChildren) {
                                             Incident u = user.getValue(Incident.class);
-                                            if(u.getIncidentUid()!=null){
-                                                if(u.getIncidentUid().equals(key)){
-                                                    user.getRef().removeValue();
-                                                    Toast.makeText(getContext(), "Incident Deleted!",
-                                                            Toast.LENGTH_LONG).show();
+                                            String id = user.getKey();
+                                            if(id!=null){
+                                                    if(id.equals(key)){
+                                                        user.getRef().removeValue();
+                                                        Toast.makeText(getContext(), "Incident Deleted!",
+                                                                Toast.LENGTH_LONG).show();
 
 
-                                                }
+                                                    }
+
                                             }
+
                                         }
                                     }
 
@@ -108,7 +111,7 @@ public class ListAdapter extends ArrayAdapter<Incident> {
 
                             }
                         });
-                    }
+                    //}
                 }
 
             if(verifyBtn!=null )

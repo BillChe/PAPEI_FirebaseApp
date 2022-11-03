@@ -21,7 +21,9 @@
     </TableRow>
 
     <TableRow android:layout_height="wrap_content"
-        android:layout_width="fill_parent">
+        android:layout_width="fill_parent"
+        android:id="@+id/TableRow02"
+        >
 
         <TextView
             android:id="@+id/categoryId"
@@ -44,31 +46,27 @@
             android:fontFamily="sans-serif-medium"/>
     </TableRow>
 
-    <TableRow android:layout_width="match_parent"
+    <TableRow android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/TableRow08"
-        android:gravity="center"
+        android:id="@+id/TableRow03"
+        android:orientation="horizontal"
         >
         <Button
+            android:layout_weight="1"
             android:id="@+id/verifyBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/verify_incident"
-            android:fontFamily="sans-serif-medium"
-            android:typeface="monospace"
-            android:height="40dp"
             android:textAllCaps="false"
-            android:layout_margin="5dp"/>
+        />
         <Button
+            android:layout_weight="1"
             android:id="@+id/deleteBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/delete_incident"
-            android:fontFamily="sans-serif-medium"
-            android:typeface="monospace"
-            android:height="40dp"
             android:textAllCaps="false"
-            android:layout_margin="5dp"/>
+           />
     </TableRow>
 
 </TableLayout>
